@@ -1,8 +1,7 @@
-import React from 'react';
-import { Layout } from './components/Layout';
-import { AuthProvider } from './contexts/AuthContext';
-import { ThemeProvider } from './contexts/ThemeContext';
-import { AppRouter } from './router';
+import { Layout } from "./components/Layout";
+import { AuthProvider } from "./contexts/AuthContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
+import { AppRouter } from "./router";
 
 function App() {
   return (

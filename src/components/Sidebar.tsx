@@ -1,6 +1,6 @@
-import { Link, useLocation } from 'react-router-dom';
-import { navigationItems } from './Layout';
-import { X } from 'lucide-react';
+import { Link, useLocation } from "react-router-dom";
+import { navigationItems } from "./Layout";
+import { X } from "lucide-react";
 
 interface SidebarProps {
   onClose: () => void;
@@ -22,7 +22,7 @@ export const Sidebar = ({ onClose }: SidebarProps) => {
           {navigationItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.href;
-            
+
             return (
               <li key={item.href}>
                 <Link
@@ -30,8 +30,8 @@ export const Sidebar = ({ onClose }: SidebarProps) => {
                   onClick={onClose}
                   className={`flex items-center gap-3 px-4 py-2 rounded-lg transition-colors ${
                     isActive
-                      ? 'bg-indigo-50 text-indigo-600'
-                      : 'text-gray-700 hover:bg-gray-50'
+                      ? "bg-indigo-50 text-indigo-600"
+                      : "text-gray-700 hover:bg-gray-50"
                   }`}
                 >
                   <Icon className="h-5 w-5" />
