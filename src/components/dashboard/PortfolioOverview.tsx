@@ -1,4 +1,3 @@
-import React from 'react';
 import { TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
 
 export const PortfolioOverview = () => {
@@ -14,7 +13,7 @@ export const PortfolioOverview = () => {
         </select>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
         <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg">
           <div className="flex items-center justify-between">
             <p className="text-sm text-gray-600">Total Value</p>
