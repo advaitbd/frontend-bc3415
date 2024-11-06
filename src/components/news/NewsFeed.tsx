@@ -57,24 +57,26 @@ export const NewsFeed = () => {
                   className="w-24 h-24 rounded-lg object-cover"
                 />
                 <div className="flex-1">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                        {item.category}
-                      </span>
-                      <span className="text-xs text-gray-500">
-                        {item.timeAgo}
-                      </span>
-                      <span className="text-xs text-gray-500">·</span>
-                      <span className="text-xs text-gray-500">
-                        {item.source}
-                      </span>
-                      <span className="text-xs text-gray-500">·</span>
-                      <span className="text-xs text-gray-500">
-                        {item.readTime}
-                      </span>
-                    </div>
+                  {/* Category in its own row */}
+                  <div>
+                    <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      {item.category}
+                    </span>
                   </div>
+
+                  {/* Metadata row */}
+                  <div className="flex items-center space-x-2 mt-1">
+                    <span className="text-xs text-gray-500">
+                      {item.timeAgo}
+                    </span>
+                    <span className="text-xs text-gray-500">·</span>
+                    <span className="text-xs text-gray-500">{item.source}</span>
+                    <span className="text-xs text-gray-500">·</span>
+                    <span className="text-xs text-gray-500">
+                      {item.readTime}
+                    </span>
+                  </div>
+
                   <h3 className="mt-1 text-lg font-medium text-gray-900">
                     {item.title}
                   </h3>
