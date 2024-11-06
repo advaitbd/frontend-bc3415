@@ -26,7 +26,7 @@ export const PortfolioOverview = () => {
             className="w-20 h-20 rounded-lg object-cover shadow-lg"
           />
           <div>
-            <h1 className="text-4xl">
+            <h1 className="text-2xl">
               <span className="text-[#092C9F]">{getGreeting()}</span>,
               <span className="text-[#092C9F] font-bold"> Prof</span>
             </h1>

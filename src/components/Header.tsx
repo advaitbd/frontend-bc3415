@@ -30,7 +30,7 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
       }`}
     >
       <div className="px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between lg:justify-end">
+        <div className="flex h-16 items-center justify-between">
           {/* Mobile menu button - aligned left */}
           <button
             onClick={onMenuClick}
@@ -40,15 +40,9 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
           </button>
 
           {/* App name with custom logo - centered */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-2">
-            <img
-              src={logo}
-              alt="Fin Advisor Logo"
-              className="h-7 w-7" // Adjust size as needed
-            />
-            <h1 className="text-2xl font-semibold text-gray-900">
-              Fin Advisor
-            </h1>
+          <div className="flex items-center gap-2">
+            <img src={logo} alt="Fin Advisor Logo" className="h-7 w-7" />
+            <h1 className="text-xl font-semibold text-gray-900">Fin Advisor</h1>
           </div>
 
           {/* Right-aligned icons */}
