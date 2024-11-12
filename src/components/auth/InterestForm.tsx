@@ -56,29 +56,34 @@ export const InterestSelection = () => {
   // Energy + Real Estate = Brookfield Renewable
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
-      {interests.map(interest => (
-        <div
-          key={interest.id}
-          onClick={() => toggleInterest(interest.id)}
-          className="flex items-center gap-3 p-4 rounded-lg border cursor-pointer hover:bg-gray-50 transition-colors"
+    <div className="space-y-6 p-4">
+      <h1 className="text-2xl font-semibold text-center">
+        Please choose topics of your interest
+      </h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {interests.map(interest => (
+          <div
+            key={interest.id}
+            onClick={() => toggleInterest(interest.id)}
+            className="flex items-center gap-3 p-4 rounded-lg border cursor-pointer hover:bg-gray-50 transition-colors"
+          >
+            <div className="flex items-center justify-center w-6 h-6 border rounded">
+              {selectedInterests.includes(interest.id) && <Check className="w-4 h-4 text-blue-600" />}
+            </div>
+            {getInterestIcon(interest.id)}
+            <div className="flex flex-col">
+              <span className="font-medium">{interest.name}</span>
+              <span className="text-sm text-gray-500">{interest.description}</span>
+            </div>
+          </div>
+        ))}
+        <button 
+          onClick={handleSubmit}
+          className="col-span-full mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
         >
-          <div className="flex items-center justify-center w-6 h-6 border rounded">
-            {selectedInterests.includes(interest.id) && <Check className="w-4 h-4 text-blue-600" />}
-          </div>
-          {getInterestIcon(interest.id)}
-          <div className="flex flex-col">
-            <span className="font-medium">{interest.name}</span>
-            <span className="text-sm text-gray-500">{interest.description}</span>
-          </div>
-        </div>
-      ))}
-      <button 
-        onClick={handleSubmit}
-        className="col-span-full mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-      >
-        Continue
-      </button>
+          Continue
+        </button>
+      </div>
     </div>
   );
 }; 

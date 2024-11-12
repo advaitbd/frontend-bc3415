@@ -44,7 +44,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const response = await fetch(`${BASE_URL}/api/auth/login?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': '*/*',
       },
     });
 
@@ -56,6 +56,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const data = await response.json();
     localStorage.setItem('token', data.token);
     localStorage.setItem('userId', data.user_id);
+    localStorage.setItem('userName', data.name);
     setUserId(data.user_id);
     setUser(data);
     setIsAuthenticated(true);
@@ -79,16 +80,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const data = await response.json();
     localStorage.setItem('token', data.token);
     localStorage.setItem('userId', data.user_id);
+    localStorage.setItem('userName', data.name);
     setUserId(data.user_id);
     setUser(data);
     setIsAuthenticated(true);
-    navigate('/dashboard');
+    navigate('/select-interests');
   };
 
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
+    localStorage.removeItem('userName');
     setUserId(null);
+    setUser(null);
     setIsAuthenticated(false);
     navigate('/login');
   };
