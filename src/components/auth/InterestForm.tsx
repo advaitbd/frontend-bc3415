@@ -50,6 +50,11 @@ export const InterestSelection = () => {
     }
   };
 
+  // Hardcode to combination of interests
+  // Tech + Energy = Tesla
+  // Tech + Crypto = Coinbase
+  // Energy + Real Estate = Brookfield Renewable
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
       {interests.map(interest => (

@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email, password, name, contact }),
+      body: JSON.stringify({ email: email, name: name, contact_info: contact, password: password }),
     });
 
     if (!response.ok) {
