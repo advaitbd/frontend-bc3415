@@ -32,61 +32,40 @@ const mockStocks = [
 ];
 
 export const StockSwiper = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection] = useState<'left' | 'right' | null>(null);
-
-  const handleSwipe = (dir: 'left' | 'right') => {
-    setDirection(dir);
-    setTimeout(() => {
-      setCurrentIndex((prev) => (prev + 1) % mockStocks.length);
-      setDirection(null);
-    }, 300);
-  };
-
-  const currentStock = mockStocks[currentIndex];
-
   return (
     <div className="bg-white rounded-xl shadow-sm p-6">
       <h2 className="text-xl font-semibold text-gray-900 mb-6">Stock Recommendations</h2>
 
-      <div className="relative overflow-hidden">
-        <div
-          className={`transform transition-transform duration-300 ${
-            direction === 'left'
-              ? '-translate-x-full opacity-0'
-              : direction === 'right'
-              ? 'translate-x-full opacity-0'
-              : 'translate-x-0 opacity-100'
-          }`}
-        >
-          <div className="bg-gradient-to-br from-gray-50 to-white rounded-lg overflow-hidden">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+        {mockStocks.map((stock) => (
+          <div key={stock.symbol} className="bg-gradient-to-br from-gray-50 to-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
             <img
-              src={currentStock.image}
-              alt={currentStock.name}
+              src={stock.image}
+              alt={stock.name}
               className="w-full h-48 object-cover"
             />
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h3 className="text-2xl font-bold text-gray-900">{currentStock.symbol}</h3>
-                  <p className="text-gray-600">{currentStock.name}</p>
+                  <h3 className="text-2xl font-bold text-gray-900">{stock.symbol}</h3>
+                  <p className="text-gray-600">{stock.name}</p>
                 </div>
                 <div className="text-right">
                   <p className="text-2xl font-bold text-gray-900">
-                    ${currentStock.price}
+                    ${stock.price}
                   </p>
                   <div className="flex items-center justify-end">
-                    {currentStock.change >= 0 ? (
+                    {stock.change >= 0 ? (
                       <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
                     ) : (
                       <TrendingDown className="w-4 h-4 text-red-500 mr-1" />
                     )}
                     <span
                       className={`${
-                        currentStock.change >= 0 ? 'text-green-600' : 'text-red-600'
+                        stock.change >= 0 ? 'text-green-600' : 'text-red-600'
                       }`}
                     >
-                      {currentStock.change}%
+                      {stock.change}%
                     </span>
                   </div>
                 </div>
@@ -96,45 +75,30 @@ export const StockSwiper = () => {
                 <div className="bg-gray-50 p-3 rounded-lg">
                   <p className="text-sm text-gray-600">Market Cap</p>
                   <p className="text-lg font-semibold text-gray-900">
-                    ${currentStock.marketCap}
+                    ${stock.marketCap}
                   </p>
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg">
                   <p className="text-sm text-gray-600">Recommendation</p>
                   <p className="text-lg font-semibold text-green-600">
-                    {currentStock.recommendation}
+                    {stock.recommendation}
                   </p>
                 </div>
               </div>
 
-              <div className="flex justify-center space-x-4">
-                <button
-                  onClick={() => handleSwipe('left')}
-                  className="p-4 bg-red-100 rounded-full text-red-600 hover:bg-red-200 transition-colors"
-                >
-                  <ThumbsDown className="w-6 h-6" />
-                </button>
-                <button
-                  onClick={() => handleSwipe('right')}
-                  className="p-4 bg-green-100 rounded-full text-green-600 hover:bg-green-200 transition-colors"
-                >
-                  <ThumbsUp className="w-6 h-6" />
-                </button>
-              </div>
+              <button className="w-full py-2 px-4 bg-indigo-100 text-indigo-600 rounded-lg hover:bg-indigo-200 transition-colors">
+                Add to Portfolio
+              </button>
             </div>
           </div>
-        </div>
+        ))}
       </div>
 
-      <div className="mt-4 flex justify-center">
-        {mockStocks.map((_, index) => (
-          <div
-            key={index}
-            className={`w-2 h-2 rounded-full mx-1 ${
-              index === currentIndex ? 'bg-indigo-600' : 'bg-gray-300'
-            }`}
-          />
-        ))}
+      <div className="flex justify-center">
+        <button className="py-3 px-6 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center gap-2">
+          <DollarSign className="w-5 h-5" />
+          Create Portfolio
+        </button>
       </div>
     </div>
   );

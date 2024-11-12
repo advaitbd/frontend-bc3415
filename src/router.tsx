@@ -1,4 +1,3 @@
-import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { LoginForm } from './components/auth/LoginForm';
 import { SignUpForm } from './components/auth/SignUpForm';
@@ -9,6 +8,8 @@ import { AIChat } from './components/ai/AIChat';
 import { RewardsPage } from './pages/RewardsPage';
 import { StockPicksPage } from './pages/StockPicksPage';
 import { InterestSelection } from './components/auth/InterestForm';
+import { RiskAppetiteForm } from './components/auth/RiskAppetiteForm';
+import { BudgetForm } from './components/auth/BudgetForm';
 import { useAuth } from './contexts/AuthContext';
 
 export const AppRouter = () => {
@@ -33,6 +34,8 @@ export const AppRouter = () => {
       <Route path="/ai-assistant" element={<AIChat />} />
       <Route path="/rewards" element={<RewardsPage />} />
       <Route path="/stock-picks" element={<StockPicksPage />} />
+      <Route path="/risk-selection" element={<RiskAppetiteForm />} />
+      <Route path="/budget-selection" element={<BudgetForm />} />
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );

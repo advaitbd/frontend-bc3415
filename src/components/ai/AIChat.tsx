@@ -3,6 +3,8 @@ import { useLocation } from 'react-router-dom';
 import { Send, Bot, User } from 'lucide-react';
 import botImage from '../../assets/ai-bot.jpg'; // Adjust the path as necessary
 
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 export const AIChat = () => {
   const location = useLocation();
   const { title } = location.state || {};
@@ -48,13 +50,13 @@ export const AIChat = () => {
 
     // Call backend API
     try {
-      const response = await fetch('https://backend-bc3415.onrender.com/api/chat/chat', {
+      const response = await fetch(`${BASE_URL}/api/chat/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          user_id: 'user123', // Replace with actual user ID if available
+          user_id: localStorage.getItem('userId'),
           message: message,
           context: 'investment',
         }),

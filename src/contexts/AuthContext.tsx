@@ -13,16 +13,6 @@ interface AuthContextType {
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Type for User
-// {
-//   "email": "user5000@example.com",
-//   "name": "user",
-//   "contact_info": "12345",
-//   "user_id": "bf6f0e95-e68f-4ac6-8770-ae07f7d9e61d",
-//   "created_at": "2024-11-12T16:45:47.355897",
-//   "updated_at": "2024-11-12T16:45:47.355900"
-// }
-
 interface User {
   email: string;
   name: string;
