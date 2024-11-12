@@ -1,84 +1,86 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface AuthContextType {
   isAuthenticated: boolean;
+  userId: string | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   signup: (email: string, password: string, name: string, contact: string) => Promise<void>;
 }
 
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
 
   const login = async (email: string, password: string) => {
-    // Simulate API call
-    const response = await fetch(`https://backend-bc3415.onrender.com/api/auth/login?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`, {
+
+    // Pass email and password as query string parameters
+    const response = await fetch(`${BASE_URL}/api/auth/login?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`, {
       method: 'POST',
       headers: {
-        'Content-Type': '*/*',
-      }
+        'Content-Type': 'application/json',
+      },
     });
-    console.log('Login response:', response);
+
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.message || 'Login failed');
     }
 
     const data = await response.json();
-    console.log('Login data:', data);
     localStorage.setItem('token', data.token);
+    localStorage.setItem('userId', data.user_id);
+    setUserId(data.user_id);
     setIsAuthenticated(true);
+    navigate('/dashboard');
   };
+
   const signup = async (email: string, password: string, name: string, contact: string) => {
-    // Simulate API call
-
-    // Prepare data for API
-    const signupdata = {
-      "email": email,
-      "name": name,
-      "contact_info": contact, 
-      "password": password
-  };
-  console.log('signup:', signupdata);
-
-  // Send a POST request to the API
-    const response = await fetch(`https://backend-bc3415.onrender.com/api/auth/register`, {
+    const response = await fetch(`${BASE_URL}/api/auth/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(signupdata),
+      body: JSON.stringify({ email, password, name, contact }),
     });
 
     if (!response.ok) {
-      console.log('signup response:', response);
       const errorData = await response.json();
       throw new Error(errorData.message || 'Signup failed');
     }
 
     const data = await response.json();
-    console.log('signup data:', data);
     localStorage.setItem('token', data.token);
+    localStorage.setItem('userId', data.user_id);
+    setUserId(data.user_id);
     setIsAuthenticated(true);
+    navigate('/dashboard');
   };
 
   const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    setUserId(null);
     setIsAuthenticated(false);
+    navigate('/login');
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, signup, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, userId, login, logout, signup }}>
       {children}
     </AuthContext.Provider>
   );
 }
 
-export function useAuth() {
+export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-}
+};
