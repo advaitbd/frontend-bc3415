@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Send, Bot, User } from 'lucide-react';
+import botImage from '../../assets/ai-bot.jpg'; // Adjust the path as necessary
 
 export const AIChat = () => {
   const location = useLocation();
@@ -12,6 +13,7 @@ export const AIChat = () => {
       text: "Hello! I'm your AI investment assistant. What can I help you with today?",
     },
   ]);
+  const lastMessageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (title) {
@@ -20,6 +22,12 @@ export const AIChat = () => {
       setMessage('');
     }
   }, [title]);
+
+  useEffect(() => {
+    if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [conversation]);
 
   const handleSend = async () => {
     if (message.trim() === '') return;
@@ -37,7 +45,7 @@ export const AIChat = () => {
 
     // Call backend API
     try {
-      const response = await fetch('/api/chat/chat', {
+      const response = await fetch('https://backend-bc3415.onrender.com/api/chat/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -65,21 +73,32 @@ export const AIChat = () => {
 
   return (
     <div className="flex flex-col h-[calc(100vh-11rem)] bg-white rounded-xl shadow-sm">
-      <div className="p-4 border-b border-gray-200">
-        <h2 className="text-lg font-semibold text-gray-900">AI Investment Assistant</h2>
-        <p className="text-sm text-gray-600">Ask me anything about your investments or market trends</p>
+      <div className="p-4 border-b border-gray-200 flex items-center space-x-4">
+        <img
+          src={botImage}
+          alt="AI Assistant"
+          className="w-10 h-10 rounded-full"
+        />
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900">AI Investment Assistant</h2>
+          <p className="text-sm text-gray-600">Ask me anything about your investments or market trends</p>
+        </div>
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {conversation.map((msg, index) => (
-          <div key={index} className={`flex items-start space-x-3 ${msg.sender === 'user' ? 'justify-end' : ''}`}>
+          <div
+            key={index}
+            className={`flex items-start space-x-3 ${msg.sender === 'user' ? 'justify-end' : ''}`}
+            ref={index === conversation.length - 1 ? lastMessageRef : null}
+          >
             {msg.sender === 'bot' && (
               <div className="flex-shrink-0">
                 <Bot className="w-8 h-8 text-indigo-600 bg-indigo-50 rounded-lg p-1" />
               </div>
             )}
             <div className={`flex-1 ${msg.sender === 'user' ? 'text-right' : ''}`}>
-              <div className={`rounded-lg p-4 ${msg.sender === 'bot' ? 'bg-gray-50' : 'bg-indigo-50'}`}>
+              <div className={`rounded-lg p-4 ${msg.sender === 'bot' ? 'bg-gray-50' : 'bg-indigo-50'} animate-fade-in`}>
                 <p className="text-gray-900" dangerouslySetInnerHTML={{ __html: msg.text }}></p>
               </div>
             </div>
