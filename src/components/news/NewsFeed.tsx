@@ -1,16 +1,16 @@
-// frontend-bc3415/src/components/news/NewsFeed.tsx
-import { ExternalLink, BookmarkPlus } from "lucide-react";
-import { StockTicker } from "../StockTicker";
-import { newsCategories, newsItems } from "../../data/newsData";
+import { Link } from 'react-router-dom';
+import { Brain, BookmarkPlus } from 'lucide-react';
+import { StockTicker } from '../StockTicker';
+import { newsCategories, newsItems } from '../../data/newsData';
 
 const formatDate = () => {
   const options: Intl.DateTimeFormatOptions = {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
   };
-  return new Date().toLocaleDateString("en-US", options);
+  return new Date().toLocaleDateString('en-US', options);
 };
 
 export const NewsFeed = () => {
@@ -84,10 +84,14 @@ export const NewsFeed = () => {
                     {item.excerpt}
                   </p>
                   <div className="mt-2 flex items-center space-x-4">
-                    <button className="text-sm text-indigo-600 hover:text-indigo-700 font-medium flex items-center">
-                      Read more
-                      <ExternalLink className="w-4 h-4 ml-1" />
-                    </button>
+                    <Link
+                      to="/ai-assistant"
+                      state={{ title: item.title }}
+                      className="text-sm text-indigo-600 hover:text-indigo-700 font-medium flex items-center"
+                    >
+                      Ask AI
+                      <Brain className="w-4 h-4 ml-1" />
+                    </Link>
                     <button className="text-sm text-gray-500 hover:text-gray-700 flex items-center">
                       <BookmarkPlus className="w-4 h-4 mr-1" />
                       Save for later
