@@ -43,6 +43,9 @@ export const AIChat = () => {
       { sender: 'user', text: formattedMessage },
     ]);
 
+    // Clear the message input
+    setMessage('');
+
     // Call backend API
     try {
       const response = await fetch('https://backend-bc3415.onrender.com/api/chat/chat', {
@@ -67,8 +70,6 @@ export const AIChat = () => {
       console.error('Error calling backend API:', error);
     }
 
-    // Clear the message input
-    setMessage('');
   };
 
   return (

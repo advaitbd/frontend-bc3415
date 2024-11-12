@@ -1,7 +1,8 @@
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Brain, BookmarkPlus } from 'lucide-react';
 import { StockTicker } from '../StockTicker';
-import { newsCategories, newsItems } from '../../data/newsData';
+import { newsCategories, newsItems, NewsItem } from '../../data/newsData';
 
 const formatDate = () => {
   const options: Intl.DateTimeFormatOptions = {
@@ -14,6 +15,12 @@ const formatDate = () => {
 };
 
 export const NewsFeed = () => {
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+
+  const filteredNewsItems = selectedCategory === 'All'
+    ? newsItems
+    : newsItems.filter(item => item.category === selectedCategory);
+
   return (
     <div className="space-y-6">
       {/* Date Header */}
@@ -33,9 +40,10 @@ export const NewsFeed = () => {
             {newsCategories.map((category) => (
               <button
                 key={category}
-                className="px-4 py-1.5 rounded-md text-sm font-medium whitespace-nowrap
-                          bg-gray-100 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600
-                          transition-colors first:bg-indigo-50 first:text-indigo-600"
+                onClick={() => setSelectedCategory(category)}
+                className={`px-4 py-1.5 rounded-md text-sm font-medium whitespace-nowrap
+                          ${selectedCategory === category ? 'bg-indigo-50 text-indigo-600' : 'bg-gray-100 text-gray-700'}
+                          hover:bg-indigo-50 hover:text-indigo-600 transition-colors`}
               >
                 {category}
               </button>
@@ -45,7 +53,7 @@ export const NewsFeed = () => {
 
         {/* News Articles */}
         <div className="divide-y divide-gray-200">
-          {newsItems.map((item) => (
+          {filteredNewsItems.map((item: NewsItem) => (
             <article
               key={item.id}
               className="p-4 hover:bg-gray-50 transition-colors"
@@ -77,12 +85,13 @@ export const NewsFeed = () => {
                     </span>
                   </div>
 
-                  <h3 className="mt-1 text-lg font-medium text-gray-900">
+                  <Link
+                    to={`/news/${item.id}`}
+                    state={item}
+                    className="mt-1 text-lg font-medium text-gray-900 hover:underline"
+                  >
                     {item.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-gray-600 line-clamp-2">
-                    {item.excerpt}
-                  </p>
+                  </Link>
                   <div className="mt-2 flex items-center space-x-4">
                     <Link
                       to="/ai-assistant"

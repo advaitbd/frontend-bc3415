@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { LoginForm } from './components/auth/LoginForm';
 import { PortfolioOverview } from './components/dashboard/PortfolioOverview';
 import { NewsFeed } from './components/news/NewsFeed';
+import { NewsDetail } from './components/news/NewsDetail'; // Corrected import
 import { AIChat } from './components/ai/AIChat';
 import { RewardsPage } from './pages/RewardsPage';
 import { StockPicksPage } from './pages/StockPicksPage';
@@ -24,6 +25,7 @@ export const AppRouter = () => {
     <Routes>
       <Route path="/dashboard" element={<PortfolioOverview />} />
       <Route path="/news" element={<NewsFeed />} />
+      <Route path="/news/:id" element={<NewsDetail />} /> {/* Added route for NewsDetail */}
       <Route path="/ai-assistant" element={<AIChat />} />
       <Route path="/rewards" element={<RewardsPage />} />
       <Route path="/stock-picks" element={<StockPicksPage />} />
