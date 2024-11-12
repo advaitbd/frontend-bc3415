@@ -29,7 +29,7 @@ export const SignUpForm = () => {
 
     try {
       await signup(email, password, name, contact);
-      navigate('/select-interests');  up
+      navigate('/select-interests');  
     } catch (err: any) {
       setError('Failed to sign up. Please try again.');
       setIsLoading(false);

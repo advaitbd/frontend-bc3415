@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Check, Bitcoin, Cpu, Battery, Building2, LineChart, TrendingUp, Coins } from 'lucide-react';
+import { useOnboarding } from '../../contexts/OnboardingContext';
 
 interface Interest {
   id: string;
@@ -19,6 +20,7 @@ const interests: Interest[] = [
 ];
 
 export const InterestSelection = () => {
+  const { updateInterests } = useOnboarding();
   const [selectedInterests, setSelectedInterests] = useState<string[]>(interests.map(interest => interest.id));
   const navigate = useNavigate();
 
@@ -32,9 +34,8 @@ export const InterestSelection = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Send selected interests to backend
-    console.log('Selected interests:', selectedInterests);
-    navigate('/dashboard');
+    updateInterests(selectedInterests);
+    navigate('/risk-selection');
   };
 
   const getInterestIcon = (id: string) => {
