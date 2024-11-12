@@ -1,8 +1,11 @@
-// frontend-bc3415/src/components/dashboard/PortfolioOverview.tsx
-import { TrendingUp, DollarSign } from "lucide-react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import { getPortfolioByUserId, getPortfolioRebalanceSuggestion, acceptPortfolioRebalance } from "../../services/portfolioService";
+import type { Portfolio, PortfolioSuggestion } from "../../services/portfolio";
 import profile from "../../assets/profile.jpeg";
 import { StockTicker } from "../StockTicker";
+import { PortfolioStats } from "../PortfolioStats";
 import { newsItems } from "../../data/newsData";
 
 const getGreeting = () => {
@@ -14,6 +17,57 @@ const getGreeting = () => {
 
 export const PortfolioOverview = () => {
   const navigate = useNavigate();
+  const [timeframe, setTimeframe] = useState("Last 7 days");
+  const [portfolio, setPortfolio] = useState<Portfolio | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [suggestion, setSuggestion] = useState<PortfolioSuggestion | null>(null);
+  const [hasCheckedSuggestion, setHasCheckedSuggestion] = useState(false);
+  const { userId } = useAuth();
+
+  useEffect(() => {
+    if (userId) {
+      fetchPortfolioData();
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    if (userId && portfolio && !hasCheckedSuggestion) {
+      checkForRebalanceSuggestion();
+    }
+  }, [userId, portfolio, hasCheckedSuggestion]);
+
+  const fetchPortfolioData = async () => {
+    try {
+      setIsLoading(true);
+      const data = await getPortfolioByUserId(userId!);
+      setPortfolio(data[0]);
+    } catch (error) {
+      console.error("Failed to fetch portfolio:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const checkForRebalanceSuggestion = async () => {
+    try {
+      const suggestion = await getPortfolioRebalanceSuggestion(portfolio!.portfolio_id);
+      setSuggestion(suggestion);
+      setHasCheckedSuggestion(true);
+    } catch (error) {
+      console.error("Failed to fetch suggestion:", error);
+    }
+  };
+
+  const handleAcceptRebalance = async () => {
+    try {
+      const updatedPortfolio = await acceptPortfolioRebalance(portfolio!.portfolio_id);
+      console.log(updatedPortfolio);
+      setPortfolio(updatedPortfolio);
+      setSuggestion(null);
+    } catch (error) {
+      console.error("Failed to accept rebalance:", error);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -36,6 +90,16 @@ export const PortfolioOverview = () => {
           </div>
         </div>
       </div>
+
+      {/* Portfolio Stats Component */}
+      <PortfolioStats 
+        timeframe={timeframe}
+        onTimeframeChange={setTimeframe}
+        portfolio={portfolio}
+        isLoading={isLoading}
+        suggestion={suggestion}
+        onAcceptRebalance={handleAcceptRebalance}
+      />
 
       {/* Stock Ticker */}
       <StockTicker />
@@ -70,58 +134,6 @@ export const PortfolioOverview = () => {
               </h3>
             </div>
           ))}
-        </div>
-      </div>
-
-      {/* Portfolio Stats */}
-      <div className="bg-white rounded-xl shadow-sm p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-semibold text-gray-900">
-            Portfolio Overview
-          </h2>
-          <select className="bg-gray-50 border border-gray-200 rounded-lg px-3 py-1.5 text-sm">
-            <option>Last 7 days</option>
-            <option>Last 30 days</option>
-            <option>Last 90 days</option>
-            <option>Last year</option>
-          </select>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg">
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-600">Total Value</p>
-              <DollarSign className="w-5 h-5 text-blue-600" />
-            </div>
-            <p className="text-2xl font-bold text-gray-900 mt-2">$124,567.89</p>
-            <div className="flex items-center mt-2">
-              <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
-              <span className="text-sm text-green-600">+2.4%</span>
-            </div>
-          </div>
-
-          <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-lg">
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-600">Today's Gain/Loss</p>
-              <TrendingUp className="w-5 h-5 text-purple-600" />
-            </div>
-            <p className="text-2xl font-bold text-gray-900 mt-2">+$1,234.56</p>
-            <div className="flex items-center mt-2">
-              <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
-              <span className="text-sm text-green-600">+1.2%</span>
-            </div>
-          </div>
-
-          <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 p-4 rounded-lg">
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-600">Available Cash</p>
-              <DollarSign className="w-5 h-5 text-emerald-600" />
-            </div>
-            <p className="text-2xl font-bold text-gray-900 mt-2">$15,678.90</p>
-            <button className="text-sm text-emerald-600 mt-2 hover:text-emerald-700">
-              Add funds →
-            </button>
-          </div>
         </div>
       </div>
     </div>
