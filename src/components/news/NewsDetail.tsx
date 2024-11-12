@@ -1,11 +1,12 @@
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { Brain } from 'lucide-react';
 import botImage from '../../assets/ai-bot.jpg'; // Adjust the path as necessary
 
 export const NewsDetail = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { title, content, category, timeAgo, image, excerpt } = location.state || {};
+  const { title, content, category, timeAgo, image } = location.state || {};
 
   return (
     <div className="container mx-auto p-4 pt-0">
@@ -28,17 +29,22 @@ export const NewsDetail = () => {
             <div className="flex justify-between items-center">
               <span className="bg-pink-500 text-white px-3 py-1 rounded-full text-xs">{category}</span>
               <div className="flex space-x-2">
-                <button className="bg-red-500 text-white p-2 rounded-full shadow-md">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v16h16V4H4zm4 4h8v8H8V8z" />
-                  </svg>
-                </button>
-                <button className="bg-green-500 text-white p-2 rounded-full shadow-md">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                </button>
-              </div>
+              <Link
+  to="/ai-assistant"
+  state={{ title: title }}
+  className="bg-indigo-500 text-white p-2 rounded-full shadow-md"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2a10 10 0 00-10 10 10 10 0 0010 10 10 10 0 0010-10A10 10 0 0012 2zm0 18a8 8 0 110-16 8 8 0 010 16z" />
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6l4 2" />
+  </svg>
+</Link>
+  <button className="bg-green-500 text-white p-2 rounded-full shadow-md">
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+    </svg>
+  </button>
+</div>
             </div>
             <div>
               <h4 className="text-2xl font-semibold">{title}</h4>
@@ -56,7 +62,7 @@ export const NewsDetail = () => {
       </div>
 
       <div className="bg-white rounded-lg shadow-lg p-4">
-        <p className="text-gray-700 mb-4">{excerpt}</p>
+        <p className="text-gray-700 mb-4">{content}</p>
         <figure className="overflow-hidden rounded-lg mb-4">
           <img src={image} alt={title} className="w-full h-auto" />
         </figure>
