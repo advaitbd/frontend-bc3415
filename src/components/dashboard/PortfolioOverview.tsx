@@ -22,7 +22,8 @@ export const PortfolioOverview = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [suggestion, setSuggestion] = useState<PortfolioSuggestion | null>(null);
   const [hasCheckedSuggestion, setHasCheckedSuggestion] = useState(false);
-  const { userId } = useAuth();
+  const { user, userId } = useAuth();
+
 
   useEffect(() => {
     if (userId) {
@@ -82,7 +83,7 @@ export const PortfolioOverview = () => {
           <div>
             <h1 className="text-2xl">
               <span className="text-[#092C9F]">{getGreeting()}</span>,
-              <span className="text-[#092C9F] font-bold"> Prof</span>
+              <span className="text-[#092C9F] font-bold"> {user?.name}</span>
             </h1>
             <p className="text-gray-600 mt-1">
               Here's what's happening with your portfolio today!

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 interface AuthContextType {
   isAuthenticated: boolean;
   userId: string | null;
+  user: User | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   signup: (email: string, password: string, name: string, contact: string) => Promise<void>;
@@ -12,10 +13,30 @@ interface AuthContextType {
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Type for User
+// {
+//   "email": "user5000@example.com",
+//   "name": "user",
+//   "contact_info": "12345",
+//   "user_id": "bf6f0e95-e68f-4ac6-8770-ae07f7d9e61d",
+//   "created_at": "2024-11-12T16:45:47.355897",
+//   "updated_at": "2024-11-12T16:45:47.355900"
+// }
+
+interface User {
+  email: string;
+  name: string;
+  contact_info: string;
+  user_id: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   const login = async (email: string, password: string) => {
 
@@ -36,6 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('token', data.token);
     localStorage.setItem('userId', data.user_id);
     setUserId(data.user_id);
+    setUser(data);
     setIsAuthenticated(true);
     navigate('/dashboard');
   };
@@ -58,6 +80,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('token', data.token);
     localStorage.setItem('userId', data.user_id);
     setUserId(data.user_id);
+    setUser(data);
     setIsAuthenticated(true);
     navigate('/dashboard');
   };
@@ -71,7 +94,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, userId, login, logout, signup }}>
+    <AuthContext.Provider value={{ isAuthenticated, userId, user, login, logout, signup }}>
       {children}
     </AuthContext.Provider>
   );
