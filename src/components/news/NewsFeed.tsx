@@ -1,26 +1,39 @@
-// frontend-bc3415/src/components/news/NewsFeed.tsx
-import { ExternalLink, BookmarkPlus } from "lucide-react";
-import { StockTicker } from "../StockTicker";
-import { newsCategories, newsItems } from "../../data/newsData";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Brain, BookmarkPlus } from 'lucide-react';
+import { StockTicker } from '../StockTicker';
+import { newsCategories, newsItems, NewsItem } from '../../data/newsData';
 
 const formatDate = () => {
   const options: Intl.DateTimeFormatOptions = {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
   };
-  return new Date().toLocaleDateString("en-US", options);
+  return new Date().toLocaleDateString('en-US', options);
+};
+
+const parseTimeAgo = (timeAgo: string): number => {
+  const [value, unit] = timeAgo.split(' ');
+  const multiplier = unit.startsWith('hour') ? 1 : unit.startsWith('day') ? 24 : 0;
+  return parseInt(value) * multiplier;
 };
 
 export const NewsFeed = () => {
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+
+  const filteredNewsItems = selectedCategory === 'All'
+  ? newsItems.sort((a, b) => parseTimeAgo(a.timeAgo) - parseTimeAgo(b.timeAgo))
+  : newsItems.filter(item => item.category === selectedCategory);
+
   return (
     <div className="space-y-6">
-      {/* Date Header */}
+      {/* Header with Back Button */}
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-semibold text-gray-900">Market News</h1>
-        <p className="text-gray-600">{formatDate()}</p>
-      </div>
+    <h1 className="text-2xl font-semibold text-gray-900">Market News</h1>
+    <p className="text-gray-600">{formatDate()}</p>
+  </div>
 
       {/* Stock Ticker Component */}
       <StockTicker />
@@ -33,9 +46,10 @@ export const NewsFeed = () => {
             {newsCategories.map((category) => (
               <button
                 key={category}
-                className="px-4 py-1.5 rounded-md text-sm font-medium whitespace-nowrap
-                          bg-gray-100 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600
-                          transition-colors first:bg-indigo-50 first:text-indigo-600"
+                onClick={() => setSelectedCategory(category)}
+                className={`px-4 py-1.5 rounded-md text-sm font-medium whitespace-nowrap
+                          ${selectedCategory === category ? 'bg-indigo-50 text-indigo-600' : 'bg-gray-100 text-gray-700'}
+                          hover:bg-indigo-50 hover:text-indigo-600 transition-colors`}
               >
                 {category}
               </button>
@@ -45,7 +59,7 @@ export const NewsFeed = () => {
 
         {/* News Articles */}
         <div className="divide-y divide-gray-200">
-          {newsItems.map((item) => (
+          {filteredNewsItems.map((item: NewsItem) => (
             <article
               key={item.id}
               className="p-4 hover:bg-gray-50 transition-colors"
@@ -77,17 +91,22 @@ export const NewsFeed = () => {
                     </span>
                   </div>
 
-                  <h3 className="mt-1 text-lg font-medium text-gray-900">
+                  <Link
+                    to={`/news/${item.id}`}
+                    state={item}
+                    className="text-gray-900 font-medium hover:text-indigo-600 cursor-pointer"
+                  >
                     {item.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-gray-600 line-clamp-2">
-                    {item.excerpt}
-                  </p>
+                  </Link>
                   <div className="mt-2 flex items-center space-x-4">
-                    <button className="text-sm text-indigo-600 hover:text-indigo-700 font-medium flex items-center">
-                      Read more
-                      <ExternalLink className="w-4 h-4 ml-1" />
-                    </button>
+                    <Link
+                      to="/ai-assistant"
+                      state={{ title: item.title }}
+                      className="text-sm text-indigo-600 hover:text-indigo-700 font-medium flex items-center"
+                    >
+                      Ask AI
+                      <Brain className="w-4 h-4 ml-1" />
+                    </Link>
                     <button className="text-sm text-gray-500 hover:text-gray-700 flex items-center">
                       <BookmarkPlus className="w-4 h-4 mr-1" />
                       Save for later
