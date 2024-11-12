@@ -1,11 +1,12 @@
-import React from 'react';
-import { Trophy, Gift, ArrowRight } from 'lucide-react';
+import { Trophy, Gift, Award } from "lucide-react";
 
 export const PointsOverview = () => {
   return (
     <div className="bg-white rounded-xl shadow-sm p-6">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold text-gray-900">Rewards & Points</h2>
+        <h2 className="text-xl font-semibold text-gray-900">
+          Rewards & Points
+        </h2>
         <div className="flex items-center space-x-2">
           <Trophy className="w-5 h-5 text-yellow-500" />
           <span className="text-lg font-bold text-gray-900">2,450 pts</span>
@@ -19,11 +20,7 @@ export const PointsOverview = () => {
               <h3 className="font-medium text-gray-900">Trading NFT Badge</h3>
               <p className="text-sm text-gray-600 mt-1">Level: Gold Trader</p>
             </div>
-            <img
-              src="https://images.unsplash.com/photo-1635360394882-06df07611189?auto=format&fit=crop&q=80&w=100&h=100"
-              alt="NFT Badge"
-              className="w-12 h-12 rounded-lg object-cover"
-            />
+            <Award className="w-16 h-16 text-yellow-500" />
           </div>
         </div>
 

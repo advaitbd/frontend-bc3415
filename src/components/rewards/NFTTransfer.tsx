@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Send, CheckCircle, XCircle } from 'lucide-react';
+import { useState } from "react";
+import { Send, CheckCircle, Award } from "lucide-react";
 
 export const NFTTransfer = () => {
-  const [recipientAddress, setRecipientAddress] = useState('');
+  const [recipientAddress, setRecipientAddress] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   const handleTransfer = () => {
@@ -11,17 +11,15 @@ export const NFTTransfer = () => {
 
   return (
     <div className="bg-white rounded-xl shadow-sm p-6">
-      <h2 className="text-xl font-semibold text-gray-900 mb-6">Transfer NFT Badge</h2>
+      <h2 className="text-xl font-semibold text-gray-900 mb-6">
+        Transfer NFT Badge
+      </h2>
 
       {!showConfirmation ? (
         <div className="space-y-6">
           <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg mb-6">
             <div className="flex items-center space-x-4">
-              <img
-                src="https://images.unsplash.com/photo-1635360394882-06df07611189?auto=format&fit=crop&q=80&w=100&h=100"
-                alt="NFT Badge"
-                className="w-16 h-16 rounded-lg object-cover"
-              />
+              <Award className="w-16 h-16 text-yellow-500" />
               <div>
                 <h3 className="font-medium text-gray-900">Gold Trader Badge</h3>
                 <p className="text-sm text-gray-600">Points: 2,450</p>
@@ -45,8 +43,8 @@ export const NFTTransfer = () => {
 
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
             <p className="text-sm text-yellow-800">
-              Warning: This action cannot be undone. Your points and badge will be transferred
-              to the recipient.
+              Warning: This action cannot be undone. Your points and badge will
+              be transferred to the recipient.
             </p>
           </div>
 
@@ -61,7 +59,9 @@ export const NFTTransfer = () => {
       ) : (
         <div className="text-center py-8">
           <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Transfer Complete!</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            Transfer Complete!
+          </h3>
           <p className="text-gray-600 mb-6">
             Your NFT badge has been successfully transferred.
           </p>
