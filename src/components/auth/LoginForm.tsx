@@ -12,6 +12,10 @@ export const LoginForm = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
+  const goToSignUp = () => {
+    navigate('/signup');
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -101,13 +105,13 @@ export const LoginForm = () => {
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">
             Don't have an account?{' '}
-            <Link 
-              to="/signup" 
+            <button 
+              onClick={goToSignUp}
               className="font-medium text-indigo-600 hover:text-indigo-500"
               tabIndex={isLoading ? -1 : 0}
             >
               Sign up
-            </Link>
+            </button>
           </p>
         </div>
       </div>
