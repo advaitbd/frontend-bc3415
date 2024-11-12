@@ -37,14 +37,6 @@ export const acceptPortfolioRebalance = async (
 ): Promise<Portfolio> => {
   const response = await fetch(
     `${BASE_URL}/api/portfolio/portfolio/${portfolioId}/rebalance/accept`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-    },
   );
   console.log(response);
   if (!response.ok) throw new Error("Failed to accept rebalance");
