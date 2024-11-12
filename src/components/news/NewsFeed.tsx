@@ -14,20 +14,26 @@ const formatDate = () => {
   return new Date().toLocaleDateString('en-US', options);
 };
 
+const parseTimeAgo = (timeAgo: string): number => {
+  const [value, unit] = timeAgo.split(' ');
+  const multiplier = unit.startsWith('hour') ? 1 : unit.startsWith('day') ? 24 : 0;
+  return parseInt(value) * multiplier;
+};
+
 export const NewsFeed = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
 
   const filteredNewsItems = selectedCategory === 'All'
-    ? newsItems
-    : newsItems.filter(item => item.category === selectedCategory);
+  ? newsItems.sort((a, b) => parseTimeAgo(a.timeAgo) - parseTimeAgo(b.timeAgo))
+  : newsItems.filter(item => item.category === selectedCategory);
 
   return (
     <div className="space-y-6">
-      {/* Date Header */}
+      {/* Header with Back Button */}
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-semibold text-gray-900">Market News</h1>
-        <p className="text-gray-600">{formatDate()}</p>
-      </div>
+    <h1 className="text-2xl font-semibold text-gray-900">Market News</h1>
+    <p className="text-gray-600">{formatDate()}</p>
+  </div>
 
       {/* Stock Ticker Component */}
       <StockTicker />
@@ -88,7 +94,7 @@ export const NewsFeed = () => {
                   <Link
                     to={`/news/${item.id}`}
                     state={item}
-                    className="mt-1 text-lg font-medium text-gray-900 hover:underline"
+                    className="text-gray-900 font-medium hover:text-indigo-600 cursor-pointer"
                   >
                     {item.title}
                   </Link>

@@ -5,7 +5,7 @@ import botImage from '../../assets/ai-bot.jpg'; // Adjust the path as necessary
 
 export const AIChat = () => {
   const location = useLocation();
-  const { title } = location.state || { title: 'the article' };
+  const { title } = location.state || {};
   const [message, setMessage] = useState('');
   const [conversation, setConversation] = useState([
     {
