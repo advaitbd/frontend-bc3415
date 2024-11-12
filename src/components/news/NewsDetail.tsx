@@ -1,6 +1,5 @@
 import React from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
-import { Brain } from 'lucide-react';
 import botImage from '../../assets/ai-bot.jpg'; // Adjust the path as necessary
 
 export const NewsDetail = () => {
