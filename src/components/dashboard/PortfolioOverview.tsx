@@ -1,12 +1,17 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
-import { getPortfolioByUserId, getPortfolioRebalanceSuggestion, acceptPortfolioRebalance } from "../../services/portfolioService";
+import {
+  getPortfolioByUserId,
+  getPortfolioRebalanceSuggestion,
+  acceptPortfolioRebalance,
+} from "../../services/portfolioService";
 import type { Portfolio, PortfolioSuggestion } from "../../services/portfolio";
 import profile from "../../assets/profile.jpeg";
 import { StockTicker } from "../StockTicker";
 import { PortfolioStats } from "../PortfolioStats";
 import { newsItems } from "../../data/newsData";
+import Confetti from "react-confetti";
 
 const getGreeting = () => {
   const hour = new Date().getHours();
@@ -20,10 +25,13 @@ export const PortfolioOverview = () => {
   const [timeframe, setTimeframe] = useState("Last 7 days");
   const [portfolio, setPortfolio] = useState<Portfolio | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [suggestion, setSuggestion] = useState<PortfolioSuggestion | null>(null);
+  const [suggestion, setSuggestion] = useState<PortfolioSuggestion | null>(
+    null,
+  );
   const [hasCheckedSuggestion, setHasCheckedSuggestion] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false); // Confetti state
+  const [acceptedSuggestion, setAcceptSuggestion] = useState(false);
   const { user, userId } = useAuth();
-
 
   useEffect(() => {
     if (userId) {
@@ -32,10 +40,10 @@ export const PortfolioOverview = () => {
   }, [userId]);
 
   useEffect(() => {
-    if (userId && portfolio && !hasCheckedSuggestion) {
+    if (userId && portfolio && !hasCheckedSuggestion && !acceptedSuggestion) {
       checkForRebalanceSuggestion();
     }
-  }, [userId, portfolio, hasCheckedSuggestion]);
+  }, []);
 
   const fetchPortfolioData = async () => {
     try {
@@ -51,7 +59,9 @@ export const PortfolioOverview = () => {
 
   const checkForRebalanceSuggestion = async () => {
     try {
-      const suggestion = await getPortfolioRebalanceSuggestion(portfolio!.portfolio_id);
+      const suggestion = await getPortfolioRebalanceSuggestion(
+        portfolio!.portfolio_id,
+      );
       setSuggestion(suggestion);
       setHasCheckedSuggestion(true);
     } catch (error) {
@@ -60,18 +70,32 @@ export const PortfolioOverview = () => {
   };
 
   const handleAcceptRebalance = async () => {
+    // Optimistically update portfolio with suggestion
+    const originalPortfolio = portfolio;
+    setPortfolio({
+      ...portfolio!,
+      composition: suggestion!.suggested_composition,
+    });
+    setSuggestion(null); // Clear suggestion after accepting
+    setShowConfetti(true);
+    setAcceptSuggestion(true);
+
     try {
-      const updatedPortfolio = await acceptPortfolioRebalance(portfolio!.portfolio_id);
-      console.log(updatedPortfolio);
-      setPortfolio(updatedPortfolio);
-      setSuggestion(null);
+      await acceptPortfolioRebalance(portfolio!.portfolio_id);
     } catch (error) {
       console.error("Failed to accept rebalance:", error);
+      // Revert to original portfolio if API call fails
+      setPortfolio(originalPortfolio);
+    } finally {
+      setTimeout(() => setShowConfetti(false), 1000); // Hide confetti after 3 seconds
     }
   };
 
   return (
     <div className="space-y-6">
+      {/* Display Confetti when rebalance is accepted */}
+      {showConfetti && <Confetti />}
+
       {/* Greeting Section */}
       <div className="p-6">
         <div className="flex items-center gap-4">
@@ -93,7 +117,7 @@ export const PortfolioOverview = () => {
       </div>
 
       {/* Portfolio Stats Component */}
-      <PortfolioStats 
+      <PortfolioStats
         timeframe={timeframe}
         onTimeframeChange={setTimeframe}
         portfolio={portfolio}
