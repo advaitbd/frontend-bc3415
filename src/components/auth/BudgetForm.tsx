@@ -117,10 +117,10 @@ export const BudgetForm = () => {
         <div
           key={budget.id}
           onClick={() => setSelectedBudget(budget.id)}
-          className="flex flex-col p-4 rounded-lg border cursor-pointer hover:bg-gray-50 transition-colors"
+          className="flex flex-col p-4 rounded-lg border cursor-pointer bg-gray-50"
         >
           <div className="flex items-center gap-3 mb-3">
-            <div className="flex items-center justify-center w-6 h-6 border rounded">
+            <div className="flex items-center justify-center w-6 h-6 border rounded ">
               {selectedBudget === budget.id && (
                 <div className="w-4 h-4 bg-blue-600 rounded-sm" />
               )}

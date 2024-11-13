@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import botImage from '../../assets/ai-bot.jpg'; // Adjust the path as necessary
+import { Bot } from 'lucide-react';
 
 export const NewsDetail = () => {
   const location = useLocation();
@@ -28,22 +29,19 @@ export const NewsDetail = () => {
             <div className="flex justify-between items-center">
               <span className="bg-pink-500 text-white px-3 py-1 rounded-full text-xs">{category}</span>
               <div className="flex space-x-2">
-              <Link
-  to="/ai-assistant"
-  state={{ title: title }}
-  className="bg-indigo-500 text-white p-2 rounded-full shadow-md"
->
-  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2a10 10 0 00-10 10 10 10 0 0010 10 10 10 0 0010-10A10 10 0 0012 2zm0 18a8 8 0 110-16 8 8 0 010 16z" />
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6l4 2" />
-  </svg>
-</Link>
-  <button className="bg-green-500 text-white p-2 rounded-full shadow-md">
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-    </svg>
-  </button>
-</div>
+                <Link
+                  to="/ai-assistant"
+                  state={{ title: title }}
+                  className="bg-indigo-500 text-white p-2 rounded-full shadow-md"
+                >
+                  <Bot className="h-6 w-6" />
+                </Link>
+                <button className="bg-green-500 text-white p-2 rounded-full shadow-md">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </button>
+              </div>
             </div>
             <div>
               <h4 className="text-2xl font-semibold">{title}</h4>

@@ -66,7 +66,7 @@ export const InterestSelection = () => {
           <div
             key={interest.id}
             onClick={() => toggleInterest(interest.id)}
-            className="flex items-center gap-3 p-4 rounded-lg border cursor-pointer hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-3 p-4 rounded-lg border cursor-pointer bg-white"
           >
             <div className="flex items-center justify-center w-6 h-6 border rounded">
               {selectedInterests.includes(interest.id) && <Check className="w-4 h-4 text-blue-600" />}

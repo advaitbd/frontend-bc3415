@@ -23,7 +23,7 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
 
   return (
     <header
-      className={`sticky top-0 z-10 transition-all duration-200 ${
+      className={`sticky top-0 z-10 transition-all duration-200 pt-4 ${
         scrolled
           ? "bg-white/70 backdrop-blur-sm border-b border-gray-200 shadow-sm"
           : "bg-transparent"
@@ -39,8 +39,8 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
             <Menu className="h-6 w-6" />
           </button>
 
-          {/* App name with custom logo - centered */}
-          <div className="flex items-center gap-2">
+          {/* App name with custom logo - actually centered */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-2">
             <img src={logo} alt="Fin Advisor Logo" className="h-7 w-7" />
             <h1 className="text-xl font-semibold text-gray-900">Fin Advisor</h1>
           </div>

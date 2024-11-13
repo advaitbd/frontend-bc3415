@@ -43,7 +43,7 @@ const mockStocks = [
     marketCap: "2.8T",
     recommendation: "Strong Buy",
     image:
-      "https://images.unsplash.com/photo-1611174743420-3d7df880ce32?auto=format&fit=crop&q=80&w=400&h=300",
+      "https://streetfins.com/wp-content/uploads/2023/05/merlin_168487071_758ee693-dee1-4a5d-bb72-61d989164577-superJumbo.jpg",
   },
   {
     symbol: "TSLA",
@@ -71,6 +71,11 @@ export const StockSwiper = () => {
   const { onboardingData } = useOnboarding();
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const [addedStocks, setAddedStocks] = useState<Record<string, boolean>>({
+    AAPL: true,
+    TSLA: true,
+    NVDA: true
+  });
 
   const portfolioValue = onboardingData.budget.customAmount
     ? parseInt(onboardingData.budget.customAmount)
@@ -175,8 +180,21 @@ export const StockSwiper = () => {
                   </div>
                 </div>
 
-                <button className="w-full py-2 px-4 bg-indigo-100 text-indigo-600 rounded-lg hover:bg-indigo-200 transition-colors">
-                  Add to Portfolio
+                <button 
+                  onClick={(e) => {
+                    e.preventDefault(); // Prevent Link
+                    setAddedStocks(prev => ({
+                      ...prev, 
+                      [stock.symbol]: !prev[stock.symbol]
+                    }));
+                  }}
+                  className={`w-full py-2 px-4 rounded-lg transition-colors ${
+                    addedStocks[stock.symbol]
+                      ? "bg-green-100 text-green-600 hover:bg-green-200"
+                      : "bg-indigo-100 text-indigo-600 hover:bg-indigo-200"
+                  }`}
+                >
+                  {addedStocks[stock.symbol] ? "Added in Portfolio" : "Add to Portfolio"}
                 </button>
               </div>
             </div>

@@ -10,6 +10,8 @@ import {
 } from "lucide-react";
 import dynamic from 'next/dynamic';
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
+import { useNavigate } from 'react-router-dom';
+
 
 
 // Mock stock details (you should replace this with real API data)
@@ -35,6 +37,7 @@ const mockStockDetails = {
 export const StockDetailPage = () => {
   const { symbol } = useParams<{ symbol: string }>();
   const stock = mockStockDetails[symbol as keyof typeof mockStockDetails];
+  const navigate = useNavigate();
 
   if (!stock) {
     return <div>Stock not found</div>;
@@ -42,6 +45,11 @@ export const StockDetailPage = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
+      <button className="text-gray-700 hover:text-gray-900" onClick={() => navigate(-1)}>
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column - Stock Info */}
         <div className="lg:col-span-1">

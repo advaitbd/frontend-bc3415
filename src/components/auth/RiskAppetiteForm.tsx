@@ -66,7 +66,7 @@ export const RiskAppetiteForm = () => {
         <div
           key={risk.id}
           onClick={() => setSelectedRisk(risk.id)}
-          className="flex flex-col p-4 rounded-lg border cursor-pointer hover:bg-gray-50 transition-colors"
+          className="flex flex-col p-4 rounded-lg border cursor-pointer bg-white"
         >
           <div className="flex items-center gap-3 mb-3">
             <div className="flex items-center justify-center w-6 h-6 border rounded">
