@@ -22,14 +22,12 @@ const getGreeting = () => {
 
 export const PortfolioOverview = () => {
   const navigate = useNavigate();
-  const [timeframe, setTimeframe] = useState("Last 7 days");
   const [portfolio, setPortfolio] = useState<Portfolio | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [suggestion, setSuggestion] = useState<PortfolioSuggestion | null>(
     null,
   );
-  const [hasCheckedSuggestion, setHasCheckedSuggestion] = useState(false);
-  const [showConfetti, setShowConfetti] = useState(false); // Confetti state
+  const [showConfetti, setShowConfetti] = useState(false);
   const [acceptedSuggestion, setAcceptSuggestion] = useState(false);
   const { user, userId } = useAuth();
 
@@ -38,12 +36,6 @@ export const PortfolioOverview = () => {
       fetchPortfolioData();
     }
   }, [userId]);
-
-  useEffect(() => {
-    if (userId && portfolio && !hasCheckedSuggestion && !acceptedSuggestion) {
-      checkForRebalanceSuggestion();
-    }
-  }, []);
 
   const fetchPortfolioData = async () => {
     try {
@@ -59,24 +51,25 @@ export const PortfolioOverview = () => {
 
   const checkForRebalanceSuggestion = async () => {
     try {
+      setIsLoading(true);
       const suggestion = await getPortfolioRebalanceSuggestion(
         portfolio!.portfolio_id,
       );
       setSuggestion(suggestion);
-      setHasCheckedSuggestion(true);
     } catch (error) {
       console.error("Failed to fetch suggestion:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleAcceptRebalance = async () => {
-    // Optimistically update portfolio with suggestion
     const originalPortfolio = portfolio;
     setPortfolio({
       ...portfolio!,
       composition: suggestion!.suggested_composition,
     });
-    setSuggestion(null); // Clear suggestion after accepting
+    setSuggestion(null);
     setShowConfetti(true);
     setAcceptSuggestion(true);
 
@@ -84,10 +77,9 @@ export const PortfolioOverview = () => {
       await acceptPortfolioRebalance(portfolio!.portfolio_id);
     } catch (error) {
       console.error("Failed to accept rebalance:", error);
-      // Revert to original portfolio if API call fails
       setPortfolio(originalPortfolio);
     } finally {
-      setTimeout(() => setShowConfetti(false), 1000); // Hide confetti after 3 seconds
+      setTimeout(() => setShowConfetti(false), 1000);
     }
   };
 
@@ -118,12 +110,11 @@ export const PortfolioOverview = () => {
 
       {/* Portfolio Stats Component */}
       <PortfolioStats
-        timeframe={timeframe}
-        onTimeframeChange={setTimeframe}
         portfolio={portfolio}
         isLoading={isLoading}
         suggestion={suggestion}
         onAcceptRebalance={handleAcceptRebalance}
+        onCheckRebalance={checkForRebalanceSuggestion}
       />
 
       {/* Stock Ticker */}
