@@ -1,15 +1,6 @@
 // src/pages/StockDetailPage.tsx
 import { useParams } from "react-router-dom";
 import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
-import {
   TrendingUp,
   TrendingDown,
   DollarSign,
@@ -17,14 +8,9 @@ import {
   Users,
   Clock,
 } from "lucide-react";
+import dynamic from 'next/dynamic';
+const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-// Mock data for the chart
-const mockChartData = Array.from({ length: 30 }, (_, i) => ({
-  date: new Date(
-    Date.now() - (30 - i) * 24 * 60 * 60 * 1000,
-  ).toLocaleDateString(),
-  price: Math.random() * 20 + 160, // Random price between 160 and 180
-}));
 
 // Mock stock details (you should replace this with real API data)
 const mockStockDetails = {
@@ -138,20 +124,7 @@ export const StockDetailPage = () => {
               Price Performance
             </h2>
             <div className="h-[400px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={mockChartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis />
-                  <Tooltip />
-                  <Area
-                    type="monotone"
-                    dataKey="price"
-                    stroke="#4f46e5"
-                    fill="#e0e7ff"
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
+              <StockChart data={defaultData} />
             </div>
           </div>
 
@@ -163,6 +136,57 @@ export const StockDetailPage = () => {
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+// Add defaultData (you'll need to replace this with actual historical data)
+const defaultData = [
+  { x: new Date('2024-03-03'), open: 180.20, high: 178.35, low: 174.80, close: 177.15, volume: 2345000 },
+  { x: new Date('2024-03-04'), open: 177.50, high: 179.90, low: 176.25, close: 178.40, volume: 1987000 },
+  { x: new Date('2024-03-05'), open: 178.60, high: 180.15, low: 177.30, close: 179.25, volume: 2156000 },
+  { x: new Date('2024-03-06'), open: 182.00, high: 181.45, low: 178.20, close: 180.90, volume: 2567000 },
+  { x: new Date('2024-03-07'), open: 180.75, high: 182.30, low: 179.50, close: 181.15, volume: 2234000 },
+  { x: new Date('2024-03-08'), open: 183.20, high: 183.75, low: 180.40, close: 182.60, volume: 2789000 },
+  { x: new Date('2024-03-09'), open: 182.40, high: 184.20, low: 181.15, close: 183.45, volume: 2456000 }
+];
+
+
+// Add missing StockChart component
+const StockChart: React.FC<{ data: typeof defaultData }> = ({ data }) => {
+  const options = {
+    chart: {
+      type: 'candlestick',
+      height: 200
+    },
+    xaxis: {
+      type: 'datetime',
+      tooltip: {
+        enabled: false, // Disable the x-axis tooltip
+      }
+    },
+    yaxis: {
+      tooltip: {
+        enabled: false,
+      }
+    }
+  };
+
+  const series = [{
+    data: data.map(d => ({
+      x: new Date(d.x).getTime(),
+      y: [d.open, d.high, d.low, d.close]
+    }))
+  }];
+
+  return (
+    <div className="w-full h-[200px]">
+      <Chart
+        options={options}
+        series={series}
+        type="candlestick"
+        height={200}
+      />
     </div>
   );
 };
