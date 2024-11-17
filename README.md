@@ -5,9 +5,9 @@
 <h2 align="center">FinAdvisor</h2>
 
 <p align="center">
-    <a href="https://github.com/crustyapples/frontend-bc3415">Frontend</a>
+    <a href="https://github.com/advaitbd/frontend-bc3415">Frontend</a>
     |
-    <a href="https://github.com/crustyapples/backend-bc3415">Backend</a>
+    <a href="https://github.com/advaitbd/backend-bc3415">Backend</a>
 </p>
 
 # FinAdvisor-Frontend
